@@ -1,0 +1,12 @@
+FROM golang:1.11.5
+RUN \
+  apt-get update && \
+  apt-get install -y gcc-arm-linux-gnueabihf g++-arm-linux-gnueabihf
+
+ENV CGO_ENABLED=1
+ENV CC=arm-linux-gnueabihf-gcc 
+ENV CXX=arm-linux-gnueabihf-g++
+ENV GOOS=linux
+ENV GOARCH=arm
+ENV GOARM=7
+
