@@ -13,26 +13,26 @@ $ export LD_FLAGS="-w -s -X main.Version=$(git describe --tags) -X main.BuildDat
 
 *windows amd64*
 ```bash
-docker run --rm -v "$PWD/.:/proj" -w /proj gotify/build:v1-windows-amd64 \
-   go build -a -installsuffix cgo -ldflags "$LD_FLAGS" -o build/gotify-windows-amd64.exe /proj
+$ docker run --rm -v "$PWD/.:/proj" -w /proj gotify/build:v1-windows-amd64 \
+     go build -a -installsuffix cgo -ldflags "$LD_FLAGS" -o build/gotify-windows-amd64.exe /proj
 ```
 
 *linux amd64*
 ```bash
-docker run --rm -v "$PWD/.:/proj" -w /proj gotify/build:v1-linux-amd64 \
-   go build -a -installsuffix cgo -ldflags "$LD_FLAGS" -o build/gotify-linux-amd64 /proj
+$ docker run --rm -v "$PWD/.:/proj" -w /proj gotify/build:v1-linux-amd64 \
+     go build -a -installsuffix cgo -ldflags "$LD_FLAGS" -o build/gotify-linux-amd64 /proj
 ```
 
 *linux arm-7*
 ```bash
-docker run --rm -v "$PWD/.:/proj" -w /proj gotify/build:v1-linux-arm-7 \
-   go build -a -installsuffix cgo -ldflags "$LD_FLAGS" -o build/gotify-linux-arm-7 /proj
+$ docker run --rm -v "$PWD/.:/proj" -w /proj gotify/build:v1-linux-arm-7 \
+     go build -a -installsuffix cgo -ldflags "$LD_FLAGS" -o build/gotify-linux-arm-7 /proj
 ```
 
 *linux arm64*
 ```bash
-docker run --rm -v "$PWD/.:/proj" -w /proj gotify/build:v1-linux-arm64 \
-   go build -a -installsuffix cgo -ldflags "$LD_FLAGS" -o build/gotify-linux-arm64 /proj
+$ docker run --rm -v "$PWD/.:/proj" -w /proj gotify/build:v1-linux-arm64 \
+     go build -a -installsuffix cgo -ldflags "$LD_FLAGS" -o build/gotify-linux-arm64 /proj
 ```
 
 ### Plugins
