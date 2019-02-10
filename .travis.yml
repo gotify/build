@@ -1,0 +1,14 @@
+language: bash
+services: docker
+
+before_deploy:
+  - export GO_VERSION=$(echo $TRAVIS_TAG | cut -c 2-);
+  - make build
+  - docker login -u "$DOCKER_USERNAME" -p "$DOCKER_PASSWORD"
+
+deploy:
+  - provider: script
+    script: make push
+    skip_cleanup: true
+    on:
+      tags: true
