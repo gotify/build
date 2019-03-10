@@ -1,0 +1,9 @@
+ARG GO_VERSION
+FROM golang:$GO_VERSION
+RUN \
+  apt-get update && \
+  apt-get install -y libc6-dev-i386
+
+ENV CGO_ENABLED=1
+ENV GOOS=linux
+ENV GOARCH=386

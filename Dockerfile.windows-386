@@ -1,0 +1,12 @@
+ARG GO_VERSION
+FROM golang:$GO_VERSION
+RUN \
+  apt-get update && \
+  apt-get install -y mingw-w64
+
+ENV CGO_ENABLED=1
+ENV CC=i686-w64-mingw32-gcc
+ENV CXX=i686-w64-mingw32-g++
+ENV GOOS=windows
+ENV GOARCH=386
+
