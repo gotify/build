@@ -1,5 +1,5 @@
 ARG GO_VERSION
-FROM golang:$GO_VERSION
+FROM golang:$GO_VERSION-stretch
 RUN \
   apt-get update && \
   apt-get install -y libc6-dev-i386

@@ -1,5 +1,5 @@
 ARG GO_VERSION
-FROM golang:$GO_VERSION
+FROM golang:$GO_VERSION-stretch
 
 ENV CGO_ENABLED=1
 ENV GOOS=linux
