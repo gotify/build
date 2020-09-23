@@ -1,5 +1,5 @@
 ARG GO_VERSION
-FROM golang:$GO_VERSION
+FROM gotify/build:$GO_VERSION-linux-amd64
 RUN \
   apt-get update && \
   apt-get install -y gcc-aarch64-linux-gnu g++-aarch64-linux-gnu
