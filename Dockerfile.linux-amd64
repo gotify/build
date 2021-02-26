@@ -9,13 +9,13 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 	&& rm -rf /var/lib/apt/lists/*
 
 ENV PATH /usr/local/go/bin:$PATH
-ENV GOLANG_VERSION 1.15.2
+ENV GOLANG_VERSION 1.16
 
 RUN set -eux; \
 	\
 	dpkgArch="$(dpkg --print-architecture)"; \
-    url='https://storage.googleapis.com/golang/go1.15.2.linux-amd64.tar.gz'; \
-    sha256='b49fda1ca29a1946d6bb2a5a6982cf07ccd2aba849289508ee0f9918f6bb4552'; \
+    url='https://storage.googleapis.com/golang/go1.16.linux-amd64.tar.gz'; \
+    sha256='013a489ebb3e24ef3d915abe5b94c3286c070dfe0818d5bca8108f1d6e8440d2'; \
 	wget -O go.tgz.asc "$url.asc" --progress=dot:giga; \
 	wget -O go.tgz "$url" --progress=dot:giga; \
 	echo "$sha256 *go.tgz" | sha256sum --strict --check -; \
