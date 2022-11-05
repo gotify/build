@@ -1,0 +1,12 @@
+ARG GO_VERSION
+FROM gotify/build:$GO_VERSION-linux-amd64
+RUN \
+  apt-get update && \
+  apt-get install -y gcc-riscv64-linux-gnu g++-riscv64-linux-gnu
+
+ENV CGO_ENABLED=1
+ENV CC=riscv64-linux-gnu-gcc
+ENV CXX=riscv64-linux-gnu-g++
+ENV GOOS=linux
+ENV GOARCH=riscv64
+
