@@ -1,5 +1,5 @@
 ARG GO_VERSION
-FROM golang:$GO_VERSION-bullseye
+FROM golang:$GO_VERSION-bookworm
 RUN git config --global --add safe.directory '*'
 
 ENV CGO_ENABLED=1
