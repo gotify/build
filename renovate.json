@@ -1,0 +1,30 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "config:recommended",
+    ":semanticCommits",
+    ":semanticCommitTypeAll(chore)"
+  ],
+  "labels": [
+    "dependencies"
+  ],
+  "enabledManagers": [
+    "custom.regex"
+  ],
+  "customManagers": [
+    {
+      "customType": "regex",
+      "fileMatch": [
+        "^GO_VERSION$"
+      ],
+      "depTypeTemplate": "language",
+      "matchStrings": [
+        "^(?<currentValue>.+)\\n"
+      ],
+      "depNameTemplate": "https://github.com/golang/go",
+      "autoReplaceStringTemplate": "{{{newValue}}}",
+      "datasourceTemplate": "golang-version"
+    }
+  ],
+  "automerge": true
+}
