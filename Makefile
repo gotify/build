@@ -1,4 +1,5 @@
 PROJECT=gotify/build
+GO_VERSION?=$(shell cat GO_VERSION)
 
 build-windows-amd64:
 	docker build --build-arg GO_VERSION=${GO_VERSION} -t ${PROJECT}:${GO_VERSION}-windows-amd64 -f Dockerfile.windows-amd64 .

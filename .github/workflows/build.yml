@@ -3,6 +3,7 @@ name: Build
 on:
   push:
 
+  # Allows manual bumps by API trigger
   workflow_dispatch:
     inputs:
       go_version:
@@ -22,11 +23,16 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v2
     
-    - name: Input sanity check
+    - name: Extract input options
       if: ${{ github.event.inputs.go_version }}
       run: |
         export GO_VERSION=${{ github.event.inputs.go_version }}
-    
+
+        echo $GO_VERSION > GO_VERSION
+  
+    - name: Sanity check
+      run: |
+        GO_VERSION=$(cat GO_VERSION)
         MATCHES=$(curl -fsSL 'https://go.dev/dl/?mode=json&include=all' | jq --arg GO_VERSION "$GO_VERSION" -r ".[] | select (.version == \"go\" + \$GO_VERSION) | .version" | wc -l)
     
         if [ "$MATCHES" -ne 1 ]; then
@@ -34,28 +40,32 @@ jobs:
           exit 1
         fi
     
-    - name: Set up environment (tagged release)
-      if: ${{ startsWith(github.ref, 'refs/tags/v') }}
-      run: |
-        TAG_NAME=${GITHUB_REF#refs/tags/}
-        GO_VERSION=${TAG_NAME#v}
-        echo "GO_VERSION=$GO_VERSION" >> $GITHUB_ENV
-    
-    - name: Set up environment (non-tagged release)
-      if: ${{ !startsWith(github.ref, 'refs/tags/v') && !github.event.inputs.go_version }}
-      run: |
-          GO_VERSION=$(curl -fsSL 'https://go.dev/dl/?mode=json' | jq -r '.[] | select (.stable) | .version | sub("^go"; "")' | head -n 1)
-          echo "GO_VERSION=$GO_VERSION" >> $GITHUB_ENV
-    
-    - name: Set up environment (to-be-tagged release)
-      if: ${{ !startsWith(github.ref, 'refs/tags/v') && github.event.inputs.go_version }}
-      run: |
-          GO_VERSION=${{ github.event.inputs.go_version }}
-
-          git tag -s "v${GO_VERSION}" -m "Bump to Go $GO_VERSION"
-          git push origin --tags
-
-          echo "GO_VERSION=$GO_VERSION" >> $GITHUB_ENV
- 
     - name: Build
       run: make build
+    
+    - name: Push and tag
+      # push if we are not already tagged, the workflow is triggered by a manual go_version input or we are on master
+      if: ${{ !startsWith(github.ref, 'refs/tags/v') && (github.event.inputs.go_version || github.ref == 'refs/heads/master') }}
+      run: |
+          GO_VERSION=$(cat GO_VERSION)
+
+          if ! git diff --quiet; then
+            echo "Working directory is dirty, committing changes"
+
+            git add GO_VERSION
+            git commit -m "Bump to Go $GO_VERSION"
+
+            if ! git diff --quiet; then
+              echo "Worktree is still dirty, something went wrong"
+              exit 1
+            fi
+          fi
+
+          if ! make push; then
+            echo "Failed to push tags"
+            exit 1
+          fi
+
+          git push origin master
+          git tag -s "v${GO_VERSION}" -m "Bump to Go $GO_VERSION"
+          git push origin --tags
