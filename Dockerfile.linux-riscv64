@@ -1,5 +1,6 @@
 ARG GO_VERSION
 FROM gotify/build:$GO_VERSION-linux-amd64
+ARG VCS_REF
 RUN \
   apt-get update && \
   apt-get install -y gcc-riscv64-linux-gnu g++-riscv64-linux-gnu
@@ -10,3 +11,5 @@ ENV CXX=riscv64-linux-gnu-g++
 ENV GOOS=linux
 ENV GOARCH=riscv64
 
+LABEL org.opencontainers.image.source="https://github.com/gotify/build" \
+  org.opencontainers.image.revision=$VCS_REF 
