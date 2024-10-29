@@ -3,14 +3,37 @@ name: Build
 on:
   push:
 
+  workflow_dispatch:
+    inputs:
+      go_version:
+        description: 'Go version without the "go" prefix'
+        required: false
+
+permissions:
+  contents: write
+
 jobs:
   build:
     runs-on: ubuntu-latest
+    concurrency:
+      group: gotify-build-lock
 
     steps:
     - name: Checkout code
       uses: actions/checkout@v2
-
+    
+    - name: Input sanity check
+      if: ${{ github.event.inputs.go_version }}
+      run: |
+        export GO_VERSION=${{ github.event.inputs.go_version }}
+    
+        MATCHES=$(curl -fsSL 'https://go.dev/dl/?mode=json&include=all' | jq --arg GO_VERSION "$GO_VERSION" -r ".[] | select (.version == \"go\" + \$GO_VERSION) | .version" | wc -l)
+    
+        if [ "$MATCHES" -ne 1 ]; then
+          echo "Invalid Go version: $GO_VERSION, found $MATCHES matches"
+          exit 1
+        fi
+    
     - name: Set up environment (tagged release)
       if: ${{ startsWith(github.ref, 'refs/tags/v') }}
       run: |
@@ -19,9 +42,19 @@ jobs:
         echo "GO_VERSION=$GO_VERSION" >> $GITHUB_ENV
     
     - name: Set up environment (non-tagged release)
-      if: ${{ !startsWith(github.ref, 'refs/tags/v') }}
+      if: ${{ !startsWith(github.ref, 'refs/tags/v') && !github.event.inputs.go_version }}
       run: |
-          GO_VERSION=$(curl -sSL 'https://go.dev/dl/?mode=json' | jq -r '.[] | select (.stable) | .version | sub("^go"; "")' | head -n 1)
+          GO_VERSION=$(curl -fsSL 'https://go.dev/dl/?mode=json' | jq -r '.[] | select (.stable) | .version | sub("^go"; "")' | head -n 1)
+          echo "GO_VERSION=$GO_VERSION" >> $GITHUB_ENV
+    
+    - name: Set up environment (to-be-tagged release)
+      if: ${{ !startsWith(github.ref, 'refs/tags/v') && github.event.inputs.go_version }}
+      run: |
+          GO_VERSION=${{ github.event.inputs.go_version }}
+
+          git tag -s "v${GO_VERSION}" -m "Bump to Go $GO_VERSION"
+          git push origin --tags
+
           echo "GO_VERSION=$GO_VERSION" >> $GITHUB_ENV
  
     - name: Build
