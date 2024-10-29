@@ -49,6 +49,11 @@ jobs:
       run: |
           GO_VERSION=$(cat GO_VERSION)
 
+          if git tag --list "v${GO_VERSION}" | grep -q "v${GO_VERSION}"; then
+            echo "Tag v${GO_VERSION} already exists"
+            exit 1
+          fi
+
           if ! git diff --quiet; then
             echo "Working directory is dirty, committing changes"
 
