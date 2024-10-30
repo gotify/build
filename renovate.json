@@ -28,5 +28,14 @@
       "versioningTemplate": "docker"
     }
   ],
+  "packageRules": [
+    {
+      "matchDepNames": [
+        "docker.io/library/golang"
+      ],
+      "groupName": "Update Go version",
+      "groupSlug": "bump-go"
+    }
+  ],
   "automerge": true
 }
