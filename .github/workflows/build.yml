@@ -33,7 +33,7 @@ jobs:
     - name: Sanity check
       run: |
         GO_VERSION=$(cat GO_VERSION)
-        MATCHES=$(curl -fsSL 'https://go.dev/dl/?mode=json&include=all' | jq --arg GO_VERSION "$GO_VERSION" -r ".[] | select (.version == \"go\" + \$GO_VERSION) | .version" | wc -l)
+        MATCHES=$(curl -fsSL 'https://go.dev/dl/?mode=json&include=all' | jq --arg GO_VERSION "$GO_VERSION" -r 'map(select(.version == "go\($GO_VERSION)")) | length')
     
         if [ "$MATCHES" -ne 1 ]; then
           echo "Invalid Go version: $GO_VERSION, found $MATCHES matches"

@@ -21,9 +21,11 @@
       "matchStrings": [
         "^(?<currentValue>.+)\\n"
       ],
-      "depNameTemplate": "https://github.com/golang/go",
+      "extractVersionTemplate": "^(?<version>.+)-bookworm$",
+      "depNameTemplate": "docker.io/library/golang",
       "autoReplaceStringTemplate": "{{{newValue}}}",
-      "datasourceTemplate": "golang-version"
+      "datasourceTemplate": "docker",
+      "versioningTemplate": "docker"
     }
   ],
   "automerge": true
