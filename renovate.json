@@ -1,0 +1,42 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "config:recommended",
+    ":semanticCommits",
+    ":semanticCommitTypeAll(chore)"
+  ],
+  "labels": [
+    "dependencies"
+  ],
+  "enabledManagers": [
+    "github-actions",
+    "custom.regex"
+  ],
+  "customManagers": [
+    {
+      "customType": "regex",
+      "fileMatch": [
+        "^GO_VERSION$"
+      ],
+      "depTypeTemplate": "language",
+      "matchStrings": [
+        "^(?<currentValue>.+)\\n"
+      ],
+      "extractVersionTemplate": "^(?<version>.+)-bookworm$",
+      "depNameTemplate": "docker.io/library/golang",
+      "autoReplaceStringTemplate": "{{{newValue}}}",
+      "datasourceTemplate": "docker",
+      "versioningTemplate": "docker"
+    }
+  ],
+  "packageRules": [
+    {
+      "matchDepNames": [
+        "docker.io/library/golang"
+      ],
+      "groupName": "Update Go version",
+      "groupSlug": "bump-go",
+      "automerge": true
+    }
+  ]
+}

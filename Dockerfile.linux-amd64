@@ -1,7 +1,11 @@
 ARG GO_VERSION
-FROM golang:$GO_VERSION-bullseye
+FROM golang:$GO_VERSION-bookworm
+ARG VCS_REF
 RUN git config --global --add safe.directory '*'
 
 ENV CGO_ENABLED=1
 ENV GOOS=linux
 ENV GOARCH=amd64
+
+LABEL org.opencontainers.image.source="https://github.com/gotify/build" \
+    org.opencontainers.image.revision=$VCS_REF 

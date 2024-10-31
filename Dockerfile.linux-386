@@ -1,5 +1,6 @@
 ARG GO_VERSION
 FROM gotify/build:$GO_VERSION-linux-amd64
+ARG VCS_REF
 RUN \
   apt-get update && \
   apt-get install -y libc6-dev-i386
@@ -7,3 +8,6 @@ RUN \
 ENV CGO_ENABLED=1
 ENV GOOS=linux
 ENV GOARCH=386
+
+LABEL org.opencontainers.image.source="https://github.com/gotify/build" \
+  org.opencontainers.image.revision=$VCS_REF 
