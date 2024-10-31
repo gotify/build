@@ -52,5 +52,8 @@ jobs:
             exit 1
           fi
 
+          git config user.name "gotifyci"
+          git config user.email "gotifyci@gotify.net"
+          
           git tag "v${GO_VERSION}" -m "Bump to Go $GO_VERSION"
           git push origin --tags
