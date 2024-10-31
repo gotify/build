@@ -15,7 +15,7 @@ jobs:
     steps:
     - name: Checkout code
       uses: actions/checkout@v2
-  
+
     - name: Sanity check
       run: |
         GO_VERSION=$(cat GO_VERSION)
@@ -45,5 +45,5 @@ jobs:
             exit 1
           fi
 
-          git tag -s "v${GO_VERSION}" -m "Bump to Go $GO_VERSION"
+          git tag "v${GO_VERSION}" -m "Bump to Go $GO_VERSION"
           git push origin --tags
