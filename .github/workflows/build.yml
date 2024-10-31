@@ -40,23 +40,10 @@ jobs:
             exit 1
           fi
 
-          if ! git diff --quiet; then
-            echo "Working directory is dirty, committing changes"
-
-            git add GO_VERSION
-            git commit -m "Bump to Go $GO_VERSION"
-
-            if ! git diff --quiet; then
-              echo "Worktree is still dirty, something went wrong"
-              exit 1
-            fi
-          fi
-
           if ! make push; then
             echo "Failed to push tags"
             exit 1
           fi
 
-          git push origin master
           git tag -s "v${GO_VERSION}" -m "Bump to Go $GO_VERSION"
           git push origin --tags
