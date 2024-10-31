@@ -9,6 +9,7 @@
     "dependencies"
   ],
   "enabledManagers": [
+    "github-actions",
     "custom.regex"
   ],
   "customManagers": [
@@ -34,8 +35,8 @@
         "docker.io/library/golang"
       ],
       "groupName": "Update Go version",
-      "groupSlug": "bump-go"
+      "groupSlug": "bump-go",
+      "automerge": true
     }
-  ],
-  "automerge": true
+  ]
 }
