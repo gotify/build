@@ -20,7 +20,7 @@
       ],
       "depTypeTemplate": "language",
       "matchStrings": [
-        "^(?<currentValue>.+)\\n"
+        "^(?<currentValue>[0-9.]+)"
       ],
       "extractVersionTemplate": "^(?<version>.+)-bookworm$",
       "depNameTemplate": "docker.io/library/golang",
