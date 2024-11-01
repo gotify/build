@@ -53,7 +53,7 @@ jobs:
           fi
 
           git config user.name "gotifyci"
-          git config user.email "gotifyci@gotify.net"
+          git config user.email "gotify@protonmail.com"
           
           git tag "v${GO_VERSION}" -m "Bump to Go $GO_VERSION"
           git push origin --tags
