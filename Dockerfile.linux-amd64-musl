@@ -1,0 +1,15 @@
+ARG GO_VERSION
+FROM gotify/build:$GO_VERSION-linux-amd64
+ARG VCS_REF
+RUN \
+  apt-get update && \
+  apt-get install -y musl-tools
+
+ENV CGO_ENABLED=1
+ENV GOOS=linux
+ENV GOARCH=amd64
+ENV GO_EXTRA_LDFLAGS="-linkmode external -extldflags '-static'"
+ENV CC=musl-gcc
+
+LABEL org.opencontainers.image.source="https://github.com/gotify/build" \
+  org.opencontainers.image.revision=$VCS_REF 
